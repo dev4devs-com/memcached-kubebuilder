@@ -33,13 +33,9 @@ Simple example over how to know how getting started with Kubebuilder
 |https://github.com/golang/go/wiki/SettingGOPATH[Ensure the $GOPATH environment variable is set]
 |https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl[Install kubectl]
 |Access to a Kubernetes v1.11.3+ cluster
-|===
-
-The following prerequisite is just required if you would like to contribute with.
-
-|===
 |https://book.kubebuilder.io/quick-start.html#installation[kubebuilder]
 |===
+
 
 == Getting Started
 
