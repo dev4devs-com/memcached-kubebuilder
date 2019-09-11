@@ -1,3 +1,6 @@
+##############################
+# Generate by the kubebuilder #
+##############################
 
 # Image URL to use all building/pushing image targets
 IMG ?= cmacedo/memcached-kubebuilder:latest
