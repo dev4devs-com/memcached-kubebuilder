@@ -27,7 +27,7 @@ spec:
         - /manager
         args:
         - --enable-leader-election
-        image: cmacedo/memcached-kubebuilder:latest
+        image: quay.io/dev4devs-com/memcached-kubebuilder:latest
         name: manager
         resources:
           limits:

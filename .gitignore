@@ -3,6 +3,7 @@
 
 # kubuilder project
 bin/manager
+cover.out
 
 # Binaries for programs and plugins
 *.exe
