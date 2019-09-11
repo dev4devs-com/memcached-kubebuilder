@@ -116,6 +116,178 @@ $ make app/uninstal
 
 NOTE: To uninstall you need be logged in as a user with cluster privileges like the `system:admin` user. E.g. By using: `oc login -u system:admin`.
 
+== Quick Start Kubebuilder
+
+Following the steps used to create this project
+
+- To create the project
+```shell
+$ mkdir mkdir memcached-kubebuilder
+$ cd memcached-kubebuilder/
+$ kubebuilder init --domain example.com Memcached
+#Select the options y and y
+```
+
+- To create the APIs and controllerr
+```shell
+$ kubebuilder create api --group memcached --version v1 --kind Memcached #Select the options y and y
+```
+
+- Update the `api/v1/memcached_types.go` as follows to add the specs and status
+
+
+```go
+// MemcachedSpec defines the desired state of Memcached
+type MemcachedSpec struct {
+    // INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
+    // Important: Run "make" to regenerate code after modifying this file
+
+    //Quantity of instances
+    Size int32 `json:"size"`
+}
+
+// MemcachedStatus defines the observed state of Memcached
+type MemcachedStatus struct {
+    // INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
+    // Important: Run "make" to regenerate code after modifying this file
+
+    //Status of pods
+    Nodes []string `json:"nodes"`
+}
+```
+
+- Run the command `make` in the root of the project to update the deepcopy files.
+- Add the implementation in the Memcached `controllers/memcached_controller.go`
+- Change the MemcachedReconciler Struct in order to pass the schema as follows.
+
+```go
+// MemcachedReconciler reconciles a Memcached object
+type MemcachedReconciler struct {
+    client.Client
+    Log logr.Logger
+    *runtime.Scheme
+}
+```
+
+- Add the schema to the `MemcachedReconciler` in the main.go as follows.
+
+```go
+if err = (&controllers.MemcachedReconciler{
+    Client: mgr.GetClient(),
+    Log:    ctrl.Log.WithName("controllers").WithName("Memcached"),
+    Scheme: mgr.GetScheme(), // todo check because was required to add it to set the owner
+}).SetupWithManager(mgr); err != nil {
+    setupLog.Error(err, "unable to create controller", "controller", "Memcached")
+    os.Exit(1)
+}
+```
+
+- Remove from the command `generate` in the Makefile the instrutions to update the roles.
+
+- Add the instrutions to install/unistall the project in the Makefile as follows.
+
+```
+.PHONY: app/install
+app/install:
+    - kubectl apply -f config/manager/manager.yaml
+    - kubectl apply -f config/crd/bases/memcached.example.com_memcacheds.yaml -n system
+    - kubectl apply -f config/samples/memcached_v1_memcached.yaml -n system
+    - kubectl apply -f config/rbac/ -n system
+
+.PHONY: app/uninstall
+app/uninstall:
+    - kubectl delete namespace system
+```
+
+- Add the serviceAccount in the `config/rbac/service_account.yaml` as follows.
+
+```
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: default
+```
+
+- Replace the Roles in `config/rbac/role.yaml` as follows.
+
+```YAML
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: manager-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - services
+  - endpoints
+  - persistentvolumeclaims
+  - events
+  - configmaps
+  - secrets
+  verbs:
+  - '*'
+- apiGroups:
+  - ""
+  resources:
+  - namespaces
+  verbs:
+  - get
+- apiGroups:
+  - memcached.example.com
+  resources:
+  - memcacheds
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  - daemonsets
+  - replicasets
+  - statefulsets
+  verbs:
+  - '*'
+- apiGroups:
+  - apps
+  resourceNames:
+  - controller-manager
+  resources:
+  - deployments/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - memcached.example.com
+  resources:
+  - '*'
+  verbs:
+  - '*'
+```
+
+- Update the `IMG` in the Makefile with your repository and image:tag as you wish. E.g `quay.io/dev4devs-com/memcached-kubebuilder:latest`
+- Run in the root of the project `make docker-build`
+- Run in the root of the project `make docker-push`
+
+NOTE: You need perform the login into your regestry locally for the `docker-push` command be able to push the image to it.
+
+- Update the `memcached-kubebuilder/controllers/memcached_controller.go` with the image:tag created and pushed
+
+- Ensure that the image was pushed and your cluster is able to pull it.
+
+NOTE: Just for tests purposes make the image public and setting up the cluster to allow use insecure registry. ( E.g --insecure-registry 172.30.0.0/16 )
+
+IMPORTANT: See that the Watches were not implemented in this example so far.
+
+- Now, you are able to test it. Run `make app/install`. Note that as result of it you should be able to check 1 pod running for the operator manager and another one for the Memcached.
+
 == Contributing
 
 All contributions are hugely appreciated. Please see our link:./CONTRIBUTING.md[Contribution Guide] for guidelines on how to open issues and pull requests. Please check out our link:./CODE_OF_CONDUCT.md[Code of Conduct] too.
