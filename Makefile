@@ -73,13 +73,13 @@ endif
 # INSTALL/UNINSTALL          #
 ##############################
 
-.PHONY: install
-install:
+.PHONY: app/install
+app/install:
 	- kubectl apply -f config/manager/manager.yaml
 	- kubectl apply -f config/crd/bases/memcached.example.com_memcacheds.yaml -n system
 	- kubectl apply -f config/samples/memcached_v1_memcached.yaml -n system
 	- kubectl apply -f config/rbac/ -n system
 
-.PHONY: uninstall
-uninstall:
-	- kubectl delete namespace ${NAMESPACE}
+.PHONY: app/uninstall
+app/uninstall:
+	- kubectl delete namespace system
