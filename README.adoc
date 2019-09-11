@@ -32,6 +32,7 @@ Simple example over how to know how getting started with Kubebuilder
 |https://golang.org/doc/install[Install Golang] v1.12+
 |https://github.com/golang/go/wiki/SettingGOPATH[Ensure the $GOPATH environment variable is set]
 |https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl[Install kubectl]
+|Access to a Kubernetes v1.11.3+ cluster
 |===
 
 The following prerequisite is just required if you would like to contribute with.
@@ -70,7 +71,7 @@ $ minishift config set insecure-registry 172.30.0.0/16
 $ minishift start
 ----
 
-IMPORTANT: Please, feel free to use https://kubernetes.io/docs/setup/learning-environment/minikube/[Minikube] to check this project.
+IMPORTANT: Please, feel free to use https://kubernetes.io/docs/setup/learning-environment/minikube/[Minikube] your any Kubernetes cluster as you wish.
 
 === Installing as standalone
 
