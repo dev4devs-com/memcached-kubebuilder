@@ -1,0 +1,49 @@
+ifdef::env-github[]
+:status:
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+:table-caption!:
+endif::[]
+
+:toc:
+:toc-placement!:
+
+== Memcached Example for Kubebuilder Operator
+
+ifdef::status[]
+.*Project health*
+image:https://img.shields.io/:license-Apache2-blue.svg[License (License), link=http://www.apache.org/licenses/LICENSE-2.0]
+image:https://goreportcard.com/badge/github.com/camilamacedo86/memcached-kubebuilder[Go Report Card (Go Report Card), link=https://goreportcard.com/report/github.com/dev4devs-com/postgresql-operator]
+endif::[]
+
+:toc:
+toc::[]
+
+== Overview
+
+Simple example over how to do an Operator using Kubebuilder
+
+== Prerequisites
+
+|===
+|https://golang.org/doc/install[Install Golang] v1.12+
+|https://github.com/golang/go/wiki/SettingGOPATH[Ensure the $GOPATH environment variable is set]
+|https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl[Install kubectl]
+|===
+
+The following prerequisite is just required if you would like to contribute with.
+
+|===
+|https://book.kubebuilder.io/quick-start.html#installation[kubebuilder]
+|===
+
+== Getting Started
+
+//TODO:
+
+== Contributing
+
+All contributions are hugely appreciated. Please see our link:./CONTRIBUTING.md[Contribution Guide] for guidelines on how to open issues and pull requests. Please check out our link:./CODE_OF_CONDUCT.md[Code of Conduct] too.
