@@ -1,0 +1,7 @@
+version: "2"
+domain: example.com
+repo: memcached-kubebuilder
+resources:
+- group: memcached
+  version: v1
+  kind: Memcached
