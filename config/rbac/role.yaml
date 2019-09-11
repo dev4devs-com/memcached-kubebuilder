@@ -7,7 +7,25 @@ metadata:
   name: manager-role
 rules:
 - apiGroups:
-  - memcached.dev4devs.com
+  - ""
+  resources:
+  - pods
+  - services
+  - endpoints
+  - persistentvolumeclaims
+  - events
+  - configmaps
+  - secrets
+  verbs:
+  - '*'
+- apiGroups:
+  - ""
+  resources:
+  - namespaces
+  verbs:
+  - get
+- apiGroups:
+  - memcached.example.com
   resources:
   - memcacheds
   verbs:
@@ -19,10 +37,25 @@ rules:
   - update
   - watch
 - apiGroups:
-  - memcached.dev4devs.com
+  - apps
   resources:
-  - memcacheds/status
+  - deployments
+  - daemonsets
+  - replicasets
+  - statefulsets
   verbs:
-  - get
-  - patch
+  - '*'
+- apiGroups:
+  - apps
+  resourceNames:
+  - controller-manager
+  resources:
+  - deployments/finalizers
+  verbs:
   - update
+- apiGroups:
+  - memcached.example.com
+  resources:
+  - '*'
+  verbs:
+  - '*'

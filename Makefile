@@ -1,6 +1,6 @@
 
 # Image URL to use all building/pushing image targets
-IMG ?= cmacedo/memcached-kubebuilder:latest
+IMG ?= quay.io/dev4devs-com/memcached-kubebuilder:latest
 # Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
 CRD_OPTIONS ?= "crd:trivialVersions=true"
 
@@ -36,7 +36,7 @@ deploy: manifests
 
 # Generate manifests e.g. CRD, RBAC etc.
 manifests: controller-gen
-	$(CONTROLLER_GEN) $(CRD_OPTIONS) rbac:roleName=manager-role webhook paths="./..." output:crd:artifacts:config=config/crd/bases
+	$(CONTROLLER_GEN) $(CRD_OPTIONS) webhook paths="./..." output:crd:artifacts:config=config/crd/bases
 
 # Run go fmt against code
 fmt:
@@ -68,18 +68,18 @@ else
 CONTROLLER_GEN=$(shell which controller-gen)
 endif
 
-
 ##############################
 # INSTALL/UNINSTALL          #
 ##############################
 
-.PHONY: install
-install:
+.PHONY: app/install
+app/install:
 	- kubectl apply -f config/manager/manager.yaml
 	- kubectl apply -f config/crd/bases/memcached.example.com_memcacheds.yaml -n system
 	- kubectl apply -f config/samples/memcached_v1_memcached.yaml -n system
 	- kubectl apply -f config/rbac/ -n system
 
-.PHONY: uninstall
-uninstall:
-	- kubectl delete namespace ${NAMESPACE}
+.PHONY: app/uninstall
+app/uninstall:
+	- kubectl delete namespace system
+
