@@ -1,6 +1,6 @@
 
 # Image URL to use all building/pushing image targets
-IMG ?= controller:latest
+IMG ?= cmacedo/memcached-kubebuilder:latest
 # Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
 CRD_OPTIONS ?= "crd:trivialVersions=true"
 
@@ -67,3 +67,19 @@ CONTROLLER_GEN=$(GOBIN)/controller-gen
 else
 CONTROLLER_GEN=$(shell which controller-gen)
 endif
+
+
+##############################
+# INSTALL/UNINSTALL          #
+##############################
+
+.PHONY: install
+install:
+	- kubectl apply -f config/manager/manager.yaml
+	- kubectl apply -f config/crd/bases/memcached.example.com_memcacheds.yaml -n system
+	- kubectl apply -f config/samples/memcached_v1_memcached.yaml -n system
+	- kubectl apply -f config/rbac/ -n system
+
+.PHONY: uninstall
+uninstall:
+	- kubectl delete namespace ${NAMESPACE}
