@@ -24,6 +24,8 @@ toc::[]
 
 == Overview
 
+**IMPORTANT** This project is deprecated and has no longer been maintained. 
+
 Simple example over how to know how getting started with Kubebuilder
 
 == Prerequisites
